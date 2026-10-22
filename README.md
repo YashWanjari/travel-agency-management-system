@@ -14,4 +14,10 @@ Software Engineering PBL Project (Scrum Model)
 - Documented detailed user stories and acceptance criteria for all 6 backlog items.
 - Assigned priorities (Highest, High, Medium) mapped to Module 1 and Module 2.
 - Assigned all Sprint 1 stories to the developer.
-- Requirements baseline established in Jira.
+- Requirements baseline established in Jira. 
+
+## Day 3 Progress (22 Oct 2026):
+- Decomposed all 6 user stories into granular technical subtasks in Jira.
+- Established Java project structure (src, database, model, lib).
+- Integrated SQLite JDBC standalone driver and established database connectivity.
+- Implemented schema initialization for packages and bookings tables.
