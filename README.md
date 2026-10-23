@@ -20,4 +20,11 @@ Software Engineering PBL Project (Scrum Model)
 - Decomposed all 6 user stories into granular technical subtasks in Jira.
 - Established Java project structure (src, database, model, lib).
 - Integrated SQLite JDBC standalone driver and established database connectivity.
-- Implemented schema initialization for packages and bookings tables.
+- Implemented schema initialization for packages and bookings tables. 
+
+## Day 4 Progress (23 Oct 2026):
+- Completed Module 1 (View Travel Packages): SCRUM-3, SCRUM-4, SCRUM-5.
+- Implemented Package model and PackageDAO data access layer.
+- Seeded travel packages dataset into SQLite database.
+- Implemented console-based interactive browsing, destination search, and budget filtering logic.
+- Moved SCRUM-3, SCRUM-4, and SCRUM-5 stories to Done status in Jira.
