@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Portal - Travel Agency</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; font-family: system-ui, sans-serif; }
+        .hero { background: linear-gradient(135deg, #0d6efd, #0dcaf0); color: white; padding: 25px 20px; text-align: center; border-radius: 0 0 24px 24px; margin-bottom: 35px; }
+        .pkg-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); transition: 0.2s; }
+    </style>
+</head>
+<body>
+
+<div class="hero position-relative">
+    <div class="position-absolute top-0 end-0 p-3">
+        <span class="me-3 fw-bold">👤 Hi, {{ username }}</span>
+        <a href="/logout" class="btn btn-sm btn-light">Logout</a>
+    </div>
+    <h1 class="fw-bold mt-2">🌍 Travel Customer Portal</h1>
+</div>
+
+<div class="container mb-5">
+    <ul class="nav nav-pills justify-content-center mb-4">
+        <li class="nav-item">
+            <button class="nav-link active px-4" data-bs-toggle="pill" data-bs-target="#packagesTab">📦 Browse Packages</button>
+        </li>
+        <li class="nav-item ms-2">
+            <button class="nav-link px-4" data-bs-toggle="pill" data-bs-target="#paymentsTab">💳 My Bookings & Payments</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- PACKAGES TAB -->
+        <div class="tab-pane fade show active" id="packagesTab">
+            <div class="row g-4" id="packagesGrid">
+                {% for p in packages %}
+                <div class="col-md-3">
+                    <div class="card pkg-card h-100 shadow-sm p-3">
+                        <span class="badge bg-primary-subtle text-primary mb-2 align-self-start">{{ p.duration }}</span>
+                        <h5 class="fw-bold">{{ p.destination }}</h5>
+                        <h4 class="text-success fw-bold my-2">₹{{ "%.2f"|format(p.price) }}</h4>
+                        <button class="btn btn-outline-primary mt-auto w-100" onclick="viewItinerary({{ p.id }}, '{{ p.destination }}', `{{ p.itinerary }}`)">View Details & Book</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div class="tab-pane fade" id="paymentsTab">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="fw-bold mb-3">🔍 Pay Specific Booking</h5>
+                        <div class="input-group mb-3">
+                            <input type="text" id="bookingInput" class="form-control" placeholder="Booking Ref (e.g. BK-1234)">
+                            <button class="btn btn-primary" onclick="lookupBooking()">Lookup</button>
+                        </div>
+                        <div id="bookingDetails"></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="fw-bold mb-3">📋 My Trip History</h5>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr><th>Ref ID</th><th>Destination</th><th>Due</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for b in bookings %}
+                                    <tr>
+                                        <td class="fw-bold">{{ b.booking_id }}</td>
+                                        <td>{{ b.destination }}</td>
+                                        <td>₹{{ b.amount_due }}</td>
+                                        <td>
+                                            {% if b.payment_status.lower() == 'paid' %}<span class="badge bg-success">Paid</span>
+                                            {% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Itinerary & Booking -->
+<div class="modal fade" id="itineraryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="itineraryTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <pre class="bg-light p-3 rounded" id="itineraryContent" style="white-space: pre-wrap;"></pre>
+                <button id="bookBtn" class="btn btn-success w-100 fw-bold mt-3">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let activeBooking = null;
+
+    function viewItinerary(id, dest, itin) {
+        document.getElementById('itineraryTitle').innerText = dest;
+        document.getElementById('itineraryContent').innerText = itin;
+        document.getElementById('bookBtn').onclick = () => createBooking(id);
+        new bootstrap.Modal(document.getElementById('itineraryModal')).show();
+    }
+
+    function createBooking(packageId) {
+        fetch('/api/bookings/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ package_id: packageId })
+        }).then(res => res.json()).then(data => {
+            if(data.success) {
+                alert(`Booking Successful! Your ID is ${data.booking_id}. Please go to My Bookings to pay.`);
+                window.location.reload(); // Refresh to show new booking in table
+            }
+        });
+    }
+
+    function lookupBooking() {
+        const id = document.getElementById('bookingInput').value.trim();
+        fetch(`/api/bookings/lookup?id=${id}`)
+            .then(res => res.json())
+            .then(res => {
+                const div = document.getElementById('bookingDetails');
+                if (!res.success) {
+                    div.innerHTML = `<div class="alert alert-danger mt-3">${res.message}</div>`;
+                    return;
+                }
+                activeBooking = res;
+                div.innerHTML = `
+                    <div class="border rounded p-3 mt-3 bg-light">
+                        <p><strong>Package:</strong> ${res.destination}</p>
+                        <p><strong>Status:</strong> <span class="badge ${res.payment_status.toLowerCase() === 'paid' ? 'bg-success' : 'bg-warning text-dark'}">${res.payment_status}</span></p>
+                        ${res.payment_status.toLowerCase() !== 'paid' ? `
+                            <button class="btn btn-success w-100" onclick="payNow()">Pay ₹${res.amount_due}</button>
+                        ` : `<div class="alert alert-success py-2 mb-0">Already paid.</div>`}
+                    </div>
+                `;
+            });
+    }
+
+    function payNow() {
+        if (!activeBooking) return;
+        fetch('/api/bookings/pay', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ booking_id: activeBooking.booking_id, amount: activeBooking.amount_due })
+        }).then(res => res.json()).then(data => {
+            if (data.success) {
+                alert("Payment Successful! Receipt generated in system.");
+                window.location.reload();
+            }
+        });
+    }
+</script>
+</body>
+</html>
