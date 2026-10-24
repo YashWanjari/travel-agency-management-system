@@ -27,4 +27,13 @@ Software Engineering PBL Project (Scrum Model)
 - Implemented Package model and PackageDAO data access layer.
 - Seeded travel packages dataset into SQLite database.
 - Implemented console-based interactive browsing, destination search, and budget filtering logic.
-- Moved SCRUM-3, SCRUM-4, and SCRUM-5 stories to Done status in Jira.
+- Moved SCRUM-3, SCRUM-4, and SCRUM-5 stories to Done status in Jira. 
+
+
+## Day 5 Progress (24 Oct 2026):
+- Completed Module 2 (Manage Payments): SCRUM-6, SCRUM-7, SCRUM-8.
+- Implemented Booking model and BookingDAO data access layer.
+- Added seed customer bookings into SQLite database.
+- Implemented booking balance inquiry, simulated multi-mode payment gateway, and receipt generator.
+- Verified database state transitions from 'Pending' to 'Paid' upon successful transaction.
+- Moved SCRUM-6, SCRUM-7, and SCRUM-8 (including subtasks) to Done status in Jira.
