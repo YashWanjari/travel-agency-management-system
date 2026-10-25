@@ -36,4 +36,21 @@ Software Engineering PBL Project (Scrum Model)
 - Added seed customer bookings into SQLite database.
 - Implemented booking balance inquiry, simulated multi-mode payment gateway, and receipt generator.
 - Verified database state transitions from 'Pending' to 'Paid' upon successful transaction.
-- Moved SCRUM-6, SCRUM-7, and SCRUM-8 (including subtasks) to Done status in Jira.
+- Moved SCRUM-6, SCRUM-7, and SCRUM-8 (including subtasks) to Done status in Jira. 
+
+
+## Day 6: Sprint 1 Closure & Testing (25 Oct 2026)
+
+### 1. Quality Assurance (Testing)
+- **Black Box Testing:** Conducted manual UI testing for User Registration, Package filtering (keyword/budget), Booking generation, and Payment simulation. All test cases passed.
+- **White Box Testing:** Automated unit tests implemented in `test_app.py` using Python's `unittest` framework to verify DAO logic, database insertions, and user-isolated query execution.
+
+### 2. Sprint 1 Review
+- **Goal Achieved:** Successfully delivered a functional prototype allowing users to browse packages, make bookings, and simulate payments.
+- **Scope:** Completed User Stories SCRUM-3 to SCRUM-8.
+- **Deliverables:** A full-stack web application with SQLite database persistence and isolated user sessions.
+
+### 3. Sprint 1 Retrospective
+- **What went well:** The team successfully adapted to a tech-stack pivot (Java CLI to Python/Flask Web App) to improve scalability, maintainability, and user experience. Zero-dependency database setup (SQLite) enabled rapid prototyping.
+- **What could be improved:** Initial database schema lacked user isolation, requiring a mid-sprint database migration. 
+- **Action items for Sprint 2:** Plan entity relationships (ER schema) more thoroughly before writing code. Implement a robust Admin Panel for inventory management.
