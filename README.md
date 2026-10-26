@@ -54,3 +54,23 @@ Software Engineering PBL Project (Scrum Model)
 - **What went well:** The team successfully adapted to a tech-stack pivot (Java CLI to Python/Flask Web App) to improve scalability, maintainability, and user experience. Zero-dependency database setup (SQLite) enabled rapid prototyping.
 - **What could be improved:** Initial database schema lacked user isolation, requiring a mid-sprint database migration. 
 - **Action items for Sprint 2:** Plan entity relationships (ER schema) more thoroughly before writing code. Implement a robust Admin Panel for inventory management.
+
+
+## Day 7: Integration Testing & Payment Edge-Case Verification (26 Oct 2026)
+
+### 1. Integration & System Testing (`test_integration.py`)
+Conducted automated integration testing against the Flask application routes and SQLite persistent layer using Python's `unittest` and Flask's `test_client`.
+
+- **Boundary Condition Testing:** Verified that looking up non-existent booking IDs returns an explicit `404 Not Found` response with appropriate error handling instead of uncaught exceptions.
+- **Edge-Case Validation (Payment Mismatch):** Tested payment gateway simulation with mismatched transaction amounts. Attempting to pay an amount differing from `amount_due` is strictly rejected (`400 Bad Request`) to prevent data corruption.
+- **End-to-End Payment Flow:** Verified that submitting the exact due amount transitions the booking status from `Pending` to `Paid`, correctly generates a persistent Transaction ID (`TXN-XXXXXX`), and updates the database records.
+
+### 2. Test Execution Results
+All automated integration tests executed successfully:
+- Total tests executed: 3
+- Failures / Errors: 0
+- Status: **PASSED (OK)**
+
+### 3. Jira Task Updates
+- **SCRUM-7 (Make a simulated payment):** Completed integration verification and moved to **Done**.
+- **SCRUM-8 (View payment status and receipt):** Moved to **In Review** pending final sprint acceptance.
