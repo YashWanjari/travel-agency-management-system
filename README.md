@@ -73,4 +73,35 @@ All automated integration tests executed successfully:
 
 ### 3. Jira Task Updates
 - **SCRUM-7 (Make a simulated payment):** Completed integration verification and moved to **Done**.
-- **SCRUM-8 (View payment status and receipt):** Moved to **In Review** pending final sprint acceptance.
+- **SCRUM-8 (View payment status and receipt):** Moved to **In Review** pending final sprint acceptance. 
+
+
+## Day 8: Final Sprint 1 Closure & Acceptance (27 Oct 2026)
+
+### 1. Final Deliverable Verification
+- **SCRUM-8 (View payment status and receipt):** Moved to **Done**. Verified that receipts generate correct booking references, clear transaction timestamps, and persist reliably in the SQLite store.
+- **Sprint Goal:** 100% of planned user stories (SCRUM-3 to SCRUM-8) under Epics SCRUM-1 and SCRUM-2 have met the Definition of Done (DoD).
+
+### 2. Sprint 1 Metrics Summary
+- **Sprint Duration:** 20 Oct 2026 – 27 Oct 2026
+- **Completed User Stories:** 6 / 6 (100% completion rate)
+- **Automated Test Coverage:** White Box (`test_app.py`) and Integration (`test_integration.py`) passing with zero failures.
+- **Sprint Status:** Successfully Completed and Closed.
+
+## PBL Evaluation Artifacts: Defect Tracking & Test Case Matrix
+
+### 1. Defect & Bug Tracking (JIRA)
+- **Defect:** `[Bug] OperationalError: Missing 'username' column in bookings table`
+- **Severity/Priority:** High
+- **Steps to Reproduce:** Login -> Access Dashboard -> OperationalError thrown due to missing column.
+- **Resolution:** Re-initialized persistent store to `travel_agency_v2.db` with user-isolated relational schema.
+- **Retest Status:** Verified via `test_integration.py` and `test_app.py`. All tests executed successfully (Status: Resolved / Done).
+
+### 2. Test Execution Matrix
+| Test Case ID | Module | Test Scenario | Test Data | Expected Result | Actual Result | Status | Technique |
+|---|---|---|---|---|---|---|---|
+| TC-01 | View Travel Packages | Search destination | Keyword: "Goa" | Show matching packages | Displayed Goa Beach Escape | Pass | Equivalence Partitioning |
+| TC-02 | View Travel Packages | Budget filter slider | Max: ₹10,000 | Filter out packages > ₹10,000 | Only packages <= 10000 shown | Pass | Boundary Value Analysis |
+| TC-03 | Manage Payments | Invalid booking lookup | ID: "NON_EXISTENT_999" | Return 404 JSON error | 404 response received | Pass | Negative Testing |
+| TC-04 | Manage Payments | Amount mismatch validation | Paid ₹10k for ₹12k due | 400 Bad Request rejection | Rejected with error | Pass | Validation Testing |
+| TC-05 | Manage Payments | Full payment & receipt | Exact due amount | Status 'Paid', TXN generated | Status 'Paid', TXN persistent | Pass | Integration Testing |
